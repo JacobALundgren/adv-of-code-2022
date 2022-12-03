@@ -1,9 +1,9 @@
+use itertools::Itertools;
 use std::{
     fs::File,
     io::{BufRead, BufReader},
     path::Path,
 };
-use itertools::Itertools;
 
 fn main() {
     let matches = clap::App::new("calorie-counting")
@@ -43,8 +43,14 @@ fn main() {
     inventories.select_nth_unstable(idx);
 
     // First problem
-    println!("Max inventory carries {} calories", inventories[idx..].iter().max().unwrap());
+    println!(
+        "Max inventory carries {} calories",
+        inventories[idx..].iter().max().unwrap()
+    );
 
     // Second problem
-    println!("Max three inventories carry {} calories", inventories[idx..].iter().sum::<i32>());
+    println!(
+        "Max three inventories carry {} calories",
+        inventories[idx..].iter().sum::<i32>()
+    );
 }
