@@ -11,7 +11,7 @@ enum Outcome {
 }
 
 fn outcome(game: &str) -> Outcome {
-    let opponent_shape = game.as_bytes()[0] + ('X' as u8 - 'A' as u8);
+    let opponent_shape = game.as_bytes()[0] + (b'X' - b'A');
     let shape = game.as_bytes()[2];
     match (shape + 3 - opponent_shape) % 3 {
         0 => Outcome::Draw,
@@ -34,7 +34,7 @@ fn shape_points(game: &str) -> u32 {
 }
 
 fn adjust_for_desired_outcome(game: &str) -> String {
-    let opponent_shape = game.as_bytes()[0] + ('X' as u8 - 'A' as u8);
+    let opponent_shape = game.as_bytes()[0] + (b'X' - b'A');
     let desired_outcome = match game.as_bytes()[2] as char {
         'X' => Outcome::Loss,
         'Y' => Outcome::Draw,
@@ -48,7 +48,7 @@ fn adjust_for_desired_outcome(game: &str) -> String {
             Outcome::Draw => 0,
             Outcome::Win => 1,
         };
-    if desired_shape > 'Z' as u8 {
+    if desired_shape > b'Z' {
         desired_shape -= 3;
     }
 
@@ -66,8 +66,8 @@ fn main() {
     let path = Path::new(matches.value_of("FILENAME").unwrap());
     let display = path.display();
 
-    let file = match File::open(&path) {
-        Err(why) => panic!("Unable to open {}: {}", display, why),
+    let file = match File::open(path) {
+        Err(why) => panic!("Unable to open {display}: {why}"),
         Ok(file) => BufReader::new(file),
     };
 
@@ -79,10 +79,10 @@ fn main() {
             outcome_points(outcome(&line)) + shape_points(&line)
         })
         .sum::<u32>();
-    println!("Total score obtained first interpretation: {}", score_total);
+    println!("Total score obtained first interpretation: {score_total}");
 
-    let file = match File::open(&path) {
-        Err(why) => panic!("Unable to open {}: {}", display, why),
+    let file = match File::open(path) {
+        Err(why) => panic!("Unable to open {display}: {why}"),
         Ok(file) => BufReader::new(file),
     };
 
@@ -94,8 +94,5 @@ fn main() {
             outcome_points(outcome(&line)) + shape_points(&line)
         })
         .sum::<u32>();
-    println!(
-        "Total score obtained second interpretation: {}",
-        second_score_total
-    );
+    println!("Total score obtained second interpretation: {second_score_total}");
 }

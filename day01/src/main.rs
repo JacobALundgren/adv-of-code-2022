@@ -16,8 +16,8 @@ fn main() {
     let path = Path::new(matches.value_of("FILENAME").unwrap());
     let display = path.display();
 
-    let file = match File::open(&path) {
-        Err(why) => panic!("Unable to open {}: {}", display, why),
+    let file = match File::open(path) {
+        Err(why) => panic!("Unable to open {display}: {why}"),
         Ok(file) => BufReader::new(file),
     };
 
