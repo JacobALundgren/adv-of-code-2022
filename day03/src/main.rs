@@ -62,12 +62,13 @@ fn main() {
                         .copied()
                         .collect::<HashSet<u8>>()
                 })
-                .iter()
-                .cloned()
-                .reduce(|acc, item| acc.intersection(&item).copied().collect::<HashSet<u8>>())
+                .into_iter()
+                .reduce(|mut acc, item| {
+                    acc.retain(|e| item.contains(e));
+                    acc
+                })
                 .unwrap()
-                .iter()
-                .copied()
+                .into_iter()
                 .next()
                 .unwrap();
             priority_value(common_item) as u32
